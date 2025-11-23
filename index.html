@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Master Cookery PDF Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo-placeholder">
+                <!-- Logo will be drawn in PDF, here just text or img if needed -->
+                <h1>The Master Cookery</h1>
+            </div>
+            <p class="subtitle">PDF Generator</p>
+        </header>
+
+        <main>
+            <form id="docForm">
+                <!-- Doc Type Selection -->
+                <div class="doc-type-selector">
+                    <label>
+                        <input type="radio" name="docType" value="quote" checked>
+                        <span>Quote</span>
+                    </label>
+                    <label>
+                        <input type="radio" name="docType" value="invoice">
+                        <span>Invoice</span>
+                    </label>
+                </div>
+
+                <!-- Client Info -->
+                <div class="section">
+                    <h2>Client Details</h2>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="clientName">Client Name</label>
+                            <input type="text" id="clientName" required placeholder="e.g. John Doe">
+                        </div>
+                        <div class="input-group">
+                            <label for="company">Company (Optional)</label>
+                            <input type="text" id="company" placeholder="e.g. Tech Corp">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="address">Address</label>
+                        <textarea id="address" rows="2" required placeholder="Full billing address"></textarea>
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" required placeholder="client@example.com">
+                        </div>
+                        <div class="input-group">
+                            <label for="phone">Phone</label>
+                            <input type="tel" id="phone" required placeholder="+27 12 345 6789">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Event Info -->
+                <div class="section">
+                    <h2>Event Details</h2>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="eventName">Event Name</label>
+                            <input type="text" id="eventName" required placeholder="e.g. Annual Gala">
+                        </div>
+                        <div class="input-group">
+                            <label for="eventDate">Event Date</label>
+                            <input type="date" id="eventDate" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" required placeholder="Venue Name & Address">
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="eventType">Event Type</label>
+                            <select id="eventType">
+                                <option value="wedding">Wedding</option>
+                                <option value="corporate">Corporate</option>
+                                <option value="private">Private Party</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="courses">Number of Courses</label>
+                            <input type="number" id="courses" min="1" value="3">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing & Transport -->
+                <div class="section">
+                    <h2>Pricing & Logistics</h2>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="guestCount">Guest Count</label>
+                            <input type="number" id="guestCount" min="1" required placeholder="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="unitPrice">Price per Guest (R)</label>
+                            <input type="number" id="unitPrice" min="0" step="0.01" required placeholder="0.00">
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="distance">Distance (km)</label>
+                            <input type="number" id="distance" min="0" placeholder="0">
+                        </div>
+                        <div class="input-group">
+                            <label for="transportMode">Transport Mode</label>
+                            <select id="transportMode">
+                                <option value="manual">Manual Rate</option>
+                                <option value="custom">Custom Fixed Cost</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Transport Input -->
+                    <div class="input-group" id="transportCostGroup">
+                        <label for="transportCost">Transport Rate/Cost (R)</label>
+                        <input type="number" id="transportCost" min="0" step="0.01"
+                            placeholder="Rate per km OR Fixed Cost">
+                        <small id="transportHelp">Enter rate per km</small>
+                    </div>
+                </div>
+
+                <!-- Payment -->
+                <div class="section">
+                    <h2>Payment</h2>
+                    <div class="input-group">
+                        <label for="deposit">Deposit Amount (R)</label>
+                        <input type="number" id="deposit" min="0" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+
+                <!-- Live Summary -->
+                <div class="summary-card">
+                    <h3>Estimated Totals</h3>
+                    <div class="summary-row">
+                        <span>Food Total:</span>
+                        <span id="displayFoodTotal">R 0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Transport Total:</span>
+                        <span id="displayTransportTotal">R 0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Grand Total:</span>
+                        <span id="displayGrandTotal">R 0.00</span>
+                    </div>
+                    <div class="summary-row balance">
+                        <span>Balance Due:</span>
+                        <span id="displayBalance">R 0.00</span>
+                    </div>
+                </div>
+
+                <button type="button" id="generateBtn" class="btn-primary">
+                    Download PDF
+                </button>
+            </form>
+        </main>
+    </div>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>
