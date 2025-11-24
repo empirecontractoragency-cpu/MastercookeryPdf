@@ -1,0 +1,22 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authorized
+    function isAuthorized() {
+      return request.auth != null && 
+             (request.auth.token.email == "themastercookery@gmail.com" || 
+              request.auth.token.email == "empirecontractoragency@gmail.com");
+    }
+
+    // Rules for Quotes collection
+    match /quotes/{document=**} {
+      allow read, write: if isAuthorized();
+    }
+
+    // Rules for Invoices collection
+    match /invoices/{document=**} {
+      allow read, write: if isAuthorized();
+    }
+  }
+}
