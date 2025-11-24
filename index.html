@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#020617">
+    <title>The Master Cookery - Business Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for Premium Look -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap"
+        rel="stylesheet">
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script type="importmap">
+    {
+      "imports": {
+        "pdf-lib": "https://esm.sh/pdf-lib@1.17.1"
+      }
+    }
+    </script>
+</head>
+
+<body>
+    <!-- Ambient background for visual effects -->
+    <div class="ambient-background"></div>
+    <nav class="top-nav">
+        <div class="brand">
+            <i class='bx bxs-chef-hat brand-icon'></i>
+            <div class="brand-text">
+                <h2>The Master Cookery</h2>
+                <span>Catering Management</span>
+            </div>
+        </div>
+        <div class="nav-center">
+            <div class="nav-pills">
+                <button class="nav-pill active" data-tab="tab-dashboard"><i class='bx bxs-dashboard'></i>
+                    Dashboard</button>
+                <button class="nav-pill" data-tab="tab-gen-quote"><i class='bx bxs-file-plus'></i> Generate
+                    Quote</button>
+                <button class="nav-pill" data-tab="tab-gen-invoice"><i class='bx bxs-cart-add'></i> Generate
+                    Invoice</button>
+                <button class="nav-pill" data-tab="tab-analytics"><i class='bx bxs-bar-chart-alt-2'></i>
+                    Analytics</button>
+            </div>
+        </div>
+        <div class="nav-right">
+            <div class="user-profile">
+                <div class="user-info">
+                    <span id="user-name" class="name">Chef Sizwe</span>
+                    <span class="role">Admin</span>
+                </div>
+                <div class="avatar">CS</div>
+            </div>
+        </div>
+    </nav>
+    <main class="main-view">
+        <!-- Tab: Dashboard -->
+        <div id="tab-dashboard" class="view-section active">
+            <header class="view-header">
+                <div class="header-content">
+                    <h1>Welcome back, Chef Sizwe 🍽️</h1>
+                    <p>Here's your business at a glance.</p>
+                </div>
+            </header>
+            <div class="dashboard-grid">
+                <!-- Stats Row 1 -->
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class='bx bxs-file'></i></div>
+                    <div class="stat-info">
+                        <h3 id="dash-total-quotes">0</h3>
+                        <span>Quotes Created</span>
+                    </div>
+                    <div class="stat-meta">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class='bx bxs-receipt'></i></div>
+                    <div class="stat-info">
+                        <h3 id="dash-total-invoices">0</h3>
+                        <span>Invoices Issued</span>
+                    </div>
+                    <div class="stat-meta">Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class='bx bx-trending-up'></i></div>
+                    <div class="stat-info">
+                        <h3 id="dash-paid-invoices">0</h3>
+                        <span>Paid Invoices</span>
+                    </div>
+                    <div class="stat-meta success">Success Rate</div>
+                </div>
+                <!-- Stats Row 2 -->
+                <div class="stat-card">
+                    <div class="stat-icon gold"><i class='bx bx-dollar'></i></div>
+                    <div class="stat-info">
+                        <h3 id="dash-revenue">R0</h3>
+                        <span>Revenue</span>
+                    </div>
+                    <div class="stat-meta">This Month</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon gold"><i class='bx bx-money'></i></div>
+                    <div class="stat-info">
+                        <h3 id="dash-total-revenue">R0</h3>
+                        <span>Total Revenue</span>
+                    </div>
+                    <div class="stat-meta">All Time</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class='bx bxs-coupon'></i></div>
+                    <div class="stat-info">
+                        <h3 id="dash-balance">R0</h3>
+                        <span>Balance Due</span>
+                    </div>
+                    <div class="stat-meta">Outstanding</div>
+                </div>
+            </div>
+            <!-- Quick Action Buttons -->
+            <div class="quick-actions" style="margin-top: 2rem;">
+                <h3>Quick Actions</h3>
+                <div class="action-buttons">
+                    <button id="btn-go-quote" class="btn-action gold"><i class='bx bxs-file-plus'></i> Generate New
+                        Quote</button>
+                    <button id="btn-go-invoice" class="btn-action purple"><i class='bx bxs-cart-add'></i> Generate New
+                        Invoice</button>
+                </div>
+            </div>
+            <!-- Recent History Tables -->
+            <div class="dashboard-grid" style="margin-top: 2rem; grid-template-columns: 1fr 1fr;">
+                <div class="chart-card">
+                    <h3>Recent Quotes</h3>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Date</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-quotes-table"><!-- JS Populated --></tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Recent Invoices</h3>
+                    <div class="data-table-container">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Client</th>
+                                    <th>Status</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dash-invoices-table"><!-- JS Populated --></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Tab: Generate Quote -->
+        <div id="tab-gen-quote" class="view-section">
+            <header class="view-header">
+                <div class="header-content">
+                    <h1>Generate New Quote</h1>
+                    <p>Create a professional quote for your client.</p>
+                </div>
+            </header>
+            <div class="form-container">
+                <form id="q_docForm">
+                    <input type="hidden" id="q_docTypeInput" value="quote">
+                    <!-- Client Info -->
+                    <div class="form-section">
+                        <h3>Client Details</h3>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Client Name</label><input type="text" id="q_clientName"
+                                    required placeholder="e.g. John Doe"></div>
+                            <div class="input-group"><label>Company (Optional)</label><input type="text" id="q_company"
+                                    placeholder="e.g. Tech Corp"></div>
+                            <div class="input-group full-width"><label>Address</label><textarea id="q_address" rows="2"
+                                    required placeholder="Full billing address"></textarea></div>
+                            <div class="input-group"><label>Email</label><input type="email" id="q_email" required
+                                    placeholder="client@example.com"></div>
+                            <div class="input-group"><label>Phone</label><input type="tel" id="q_phone" required
+                                    placeholder="+27 12 345 6789"></div>
+                        </div>
+                    </div>
+                    <!-- Event Info -->
+                    <div class="form-section">
+                        <h3>Event Details</h3>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Event Name</label><input type="text" id="q_eventName"
+                                    required placeholder="e.g. Annual Gala"></div>
+                            <div class="input-group"><label>Event Date</label><input type="date" id="q_eventDate"
+                                    required></div>
+                            <div class="input-group full-width"><label>Location</label><input type="text"
+                                    id="q_location" required placeholder="Venue Name & Address"></div>
+                            <div class="input-group"><label>Event Type</label><select id="q_eventType">
+                                    <option value="Wedding">Wedding</option>
+                                    <option value="Corporate">Corporate</option>
+                                    <option value="Private Party">Private Party</option>
+                                    <option value="Other">Other</option>
+                                </select></div>
+                            <div class="input-group"><label>Courses</label><input type="number" id="q_courses" min="1"
+                                    value="3"></div>
+                        </div>
+                    </div>
+                    <!-- Pricing -->
+                    <div class="form-section">
+                        <h3>Pricing & Logistics</h3>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Guest Count</label><input type="number" id="q_guestCount"
+                                    min="1" required placeholder="0"></div>
+                            <div class="input-group"><label>Price per Guest (R)</label><input type="number"
+                                    id="q_unitPrice" min="0" step="0.01" required placeholder="0.00"></div>
+                            <div class="input-group"><label>Transport Mode</label><select id="q_transportMode">
+                                    <option value="manual">Rate per km</option>
+                                    <option value="fixed">Fixed Cost</option>
+                                </select></div>
+                            <div class="input-group"><label>Distance / Cost</label><input type="number"
+                                    id="q_transportCost" min="0" step="0.01" placeholder="Rate per km"><small
+                                    id="q_transportHelp" class="text-muted">Enter rate per km</small></div>
+                            <div class="input-group"><label>Distance (km)</label><input type="number" id="q_distance"
+                                    min="0" step="0.1" placeholder="0"></div>
+                            <div class="input-group"><label>Deposit (R)</label><input type="number" id="q_deposit"
+                                    min="0" step="0.01" placeholder="0.00"></div>
+                        </div>
+                    </div>
+                    <!-- Live Summary -->
+                    <div class="summary-box">
+                        <div class="summary-row"><span>Food Total:</span><span id="q_displayFoodTotal">R 0.00</span>
+                        </div>
+                        <div class="summary-row"><span>Transport Total:</span><span id="q_displayTransportTotal">R
+                                0.00</span></div>
+                        <div class="summary-row total"><span>Grand Total:</span><span id="q_displayGrandTotal">R
+                                0.00</span></div>
+                        <div class="summary-row balance"><span>Balance Due:</span><span id="q_displayBalance">R
+                                0.00</span></div>
+                    </div>
+                    <div class="modal-actions"><button type="button" id="q_generateBtn" class="btn-primary gold"><i
+                                class='bx bxs-download'></i> Download Quote PDF</button></div>
+                </form>
+            </div>
+        </div>
+        <!-- Tab: Generate Invoice -->
+        <div id="tab-gen-invoice" class="view-section">
+            <header class="view-header">
+                <div class="header-content">
+                    <h1>Generate New Invoice</h1>
+                    <p>Issue a formal invoice for payment.</p>
+                </div>
+            </header>
+            <div class="form-container">
+                <form id="i_docForm">
+                    <input type="hidden" id="i_docTypeInput" value="invoice">
+                    <!-- Client Info -->
+                    <div class="form-section">
+                        <h3>Client Details</h3>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Client Name</label><input type="text" id="i_clientName"
+                                    required placeholder="e.g. John Doe"></div>
+                            <div class="input-group"><label>Company (Optional)</label><input type="text" id="i_company"
+                                    placeholder="e.g. Tech Corp"></div>
+                            <div class="input-group full-width"><label>Address</label><textarea id="i_address" rows="2"
+                                    required placeholder="Full billing address"></textarea></div>
+                            <div class="input-group"><label>Email</label><input type="email" id="i_email" required
+                                    placeholder="client@example.com"></div>
+                            <div class="input-group"><label>Phone</label><input type="tel" id="i_phone" required
+                                    placeholder="+27 12 345 6789"></div>
+                        </div>
+                    </div>
+                    <!-- Event Info -->
+                    <div class="form-section">
+                        <h3>Event Details</h3>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Event Name</label><input type="text" id="i_eventName"
+                                    required placeholder="e.g. Annual Gala"></div>
+                            <div class="input-group"><label>Event Date</label><input type="date" id="i_eventDate"
+                                    required></div>
+                            <div class="input-group full-width"><label>Location</label><input type="text"
+                                    id="i_location" required placeholder="Venue Name & Address"></div>
+                            <div class="input-group"><label>Event Type</label><select id="i_eventType">
+                                    <option value="Wedding">Wedding</option>
+                                    <option value="Corporate">Corporate</option>
+                                    <option value="Private Party">Private Party</option>
+                                    <option value="Other">Other</option>
+                                </select></div>
+                            <div class="input-group"><label>Courses</label><input type="number" id="i_courses" min="1"
+                                    value="3"></div>
+                        </div>
+                    </div>
+                    <!-- Pricing -->
+                    <div class="form-section">
+                        <h3>Pricing & Logistics</h3>
+                        <div class="form-grid">
+                            <div class="input-group"><label>Guest Count</label><input type="number" id="i_guestCount"
+                                    min="1" required placeholder="0"></div>
+                            <div class="input-group"><label>Price per Guest (R)</label><input type="number"
+                                    id="i_unitPrice" min="0" step="0.01" required placeholder="0.00"></div>
+                            <div class="input-group"><label>Transport Mode</label><select id="i_transportMode">
+                                    <option value="manual">Rate per km</option>
+                                    <option value="fixed">Fixed Cost</option>
+                                </select></div>
+                            <div class="input-group"><label>Distance / Cost</label><input type="number"
+                                    id="i_transportCost" min="0" step="0.01" placeholder="Rate per km"><small
+                                    id="i_transportHelp" class="text-muted">Enter rate per km</small></div>
+                            <div class="input-group"><label>Distance (km)</label><input type="number" id="i_distance"
+                                    min="0" step="0.1" placeholder="0"></div>
+                            <div class="input-group"><label>Deposit (R)</label><input type="number" id="i_deposit"
+                                    min="0" step="0.01" placeholder="0.00"></div>
+                        </div>
+                    </div>
+                    <!-- Live Summary -->
+                    <div class="summary-box">
+                        <div class="summary-row"><span>Food Total:</span><span id="i_displayFoodTotal">R 0.00</span>
+                        </div>
+                        <div class="summary-row"><span>Transport Total:</span><span id="i_displayTransportTotal">R
+                                0.00</span></div>
+                        <div class="summary-row total"><span>Grand Total:</span><span id="i_displayGrandTotal">R
+                                0.00</span></div>
+                        <div class="summary-row balance"><span>Balance Due:</span><span id="i_displayBalance">R
+                                0.00</span></div>
+                    </div>
+                    <div class="modal-actions"><button type="button" id="i_generateBtn" class="btn-primary purple"><i
+                                class='bx bxs-download'></i> Download Invoice PDF</button></div>
+                </form>
+            </div>
+        </div>
+        <!-- Tab: Analytics -->
+        <div id="tab-analytics" class="view-section">
+            <header class="view-header">
+                <div class="header-content">
+                    <h1>Analytics & Revenue Overview</h1>
+                    <p>Track your business performance and growth</p>
+                </div>
+            </header>
+            <div class="analytics-grid">
+                <div class="kpi-card">
+                    <div class="kpi-header"><span>Total Quotes</span><i class='bx bx-file gold-text'></i></div>
+                    <h2 id="kpi-total-quotes">0</h2>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header"><span>Total Invoices</span><i class='bx bx-receipt purple-text'></i></div>
+                    <h2 id="kpi-total-invoices">0</h2>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header"><span>Paid Invoices</span><i class='bx bx-check-circle green-text'></i>
+                    </div>
+                    <h2 id="kpi-paid-invoices">0</h2>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-header"><span>Outstanding</span><i class='bx bx-time-five orange-text'></i></div>
+                    <h2 id="kpi-outstanding" class="orange-text">R0</h2>
+                </div>
+            </div>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
